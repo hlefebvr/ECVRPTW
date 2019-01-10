@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "Instance.h"
-#include "RelaxedSolution.h"
+#include "Solver.h"
 
 using namespace std;
 
@@ -20,7 +20,8 @@ int main() {
 
     Instance::load_from_file(inputs[0]);
 
-    auto x = RelaxedSolution();
+    auto solver = Solver();
+    solver.run();
 
     return 0;
 }

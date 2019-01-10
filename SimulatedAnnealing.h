@@ -2,8 +2,12 @@
 #define ECVRPTW_SIMULATEDANNEALING_H
 
 
-class SimulatedAnnealing {
+#include "SolutionCallback.h"
 
+class SimulatedAnnealing {
+    SolutionCallback& _cb;
+public:
+    explicit SimulatedAnnealing(SolutionCallback& cb);
 };
 
 

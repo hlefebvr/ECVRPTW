@@ -2,8 +2,11 @@
 #define ECVRPTW_ITERATEDLOCALSEARCH_H
 
 
-class IteratedLocalSearch {
+#include "SolutionCallback.h"
 
+class IteratedLocalSearch {
+public:
+    IteratedLocalSearch(SolutionCallback& cb, const RelaxedSolution& x);
 };
 
 
