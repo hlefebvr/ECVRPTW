@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Instance.h"
+#include "RelaxedSolution.h"
 
 using namespace std;
 
@@ -18,6 +19,8 @@ int main() {
     const double max_execution_time = 10;
 
     Instance::load_from_file(inputs[0]);
+
+    auto x = RelaxedSolution();
 
     return 0;
 }

@@ -1,0 +1,10 @@
+#ifndef ECVRPTW_SIMULATEDANNEALING_H
+#define ECVRPTW_SIMULATEDANNEALING_H
+
+
+class SimulatedAnnealing {
+
+};
+
+
+#endif //ECVRPTW_SIMULATEDANNEALING_H

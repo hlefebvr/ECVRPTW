@@ -1,0 +1,10 @@
+#ifndef ECVRPTW_ITERATEDLOCALSEARCH_H
+#define ECVRPTW_ITERATEDLOCALSEARCH_H
+
+
+class IteratedLocalSearch {
+
+};
+
+
+#endif //ECVRPTW_ITERATEDLOCALSEARCH_H
