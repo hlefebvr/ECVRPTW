@@ -20,7 +20,7 @@ int main() {
 
     Instance::load_from_file(inputs[0]);
 
-    auto solver = Solver();
+    auto solver = Solver(max_execution_time);
     solver.run();
 
     return 0;

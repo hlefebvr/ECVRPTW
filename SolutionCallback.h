@@ -7,8 +7,8 @@
 
 class SolutionCallback {
 public:
-    virtual void relaxed_callback(const RelaxedSolution&) = 0;
-    virtual void callback(const Solution&) = 0;
+    virtual void relaxed_callback(RelaxedSolution&) = 0;
+    virtual void callback(Solution&) = 0;
 };
 
 
