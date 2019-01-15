@@ -13,5 +13,6 @@ void Solver::callback(Solution& x) {
 }
 
 void Solver::relaxed_callback(RelaxedSolution& x) {
-    IteratedLocalSearch(*this, x);
+    auto ils = IteratedLocalSearch(*this, x);
+    ils.run();
 }

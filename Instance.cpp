@@ -127,3 +127,22 @@ Instance::~Instance() {
     for (auto station : _vstations) delete station;
 }
 
+const StationNode &Instance::closest_station_between(const Node&A, const Node& B, double* detour) const {
+
+    const StationNode* argmin = nullptr;
+    double min = numeric_limits<double>::max();
+    for (const StationNode* s : _vstations) {
+        if (s->id == 0) continue; // TODO : use depot.id
+        const double detour = Node::d(A, *s) + Node::d(*s, B);
+        if (detour < min) {
+            min = detour;
+            argmin = s;
+        }
+    }
+
+    if (argmin == nullptr) throw runtime_error("No station in the instance");
+    if (detour != nullptr) *detour = min;
+
+    return *argmin;
+}
+

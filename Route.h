@@ -30,5 +30,4 @@ public:
     string to_string() const;
 };
 
-
 #endif //ECVRPTW_ROUTE_H
