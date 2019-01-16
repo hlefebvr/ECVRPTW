@@ -16,9 +16,9 @@ int main() {
             "../input/Instance4_3s_45c_6v.txt"
     };
     const string output = "./output.csv";
-    const double max_execution_time = 10;
+    const double max_execution_time = 30;
 
-    Instance::load_from_file(inputs[1]);
+    Instance::load_from_file(inputs[0]);
 
     auto solver = Solver(max_execution_time);
     solver.run();
