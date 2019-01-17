@@ -74,7 +74,7 @@ Instance::Instance(const string& input_data_file) : _name(input_data_file) {
             double demand = stof(row[Q]);
             double service_time = stof(row[ST]);
             double release_date = stof(row[R]);
-            double due_date = stof(row[D]);
+            double due_date = stof(row[D]) + service_time; // TODO : WARNING : deadline is changed
             auto new_customer = new CustomerNode(id, coord.first, coord.second, demand, service_time, release_date, due_date);
             _vcustomers.push_back(new_customer);
             _overall_demand += demand;
@@ -132,7 +132,7 @@ const StationNode &Instance::closest_station_between(const Node&A, const Node& B
     const StationNode* argmin = nullptr;
     double min = numeric_limits<double>::max();
     for (const StationNode* s : _vstations) {
-        if (s->id == 0) continue; // TODO : use depot.id
+        if (s->id == instance->depot().id) continue;
         const double detour = Node::d(A, *s) + Node::d(*s, B);
         if (detour < min) {
             min = detour;
