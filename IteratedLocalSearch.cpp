@@ -16,7 +16,7 @@ IteratedLocalSearch::IteratedLocalSearch(SolutionCallback &cb, RelaxedSolution &
             if (t < customer->release_date) t = customer->release_date;
             t += customer->service_time;
 
-            _best_non_active.insert({ last_visited_node->id, customer->id });
+            if(last_visited_node->id != 0) _best_non_active.insert({ last_visited_node->id, customer->id });
 
             last_visited_node = customer;
         }
@@ -32,36 +32,47 @@ IteratedLocalSearch::IteratedLocalSearch(SolutionCallback &cb, RelaxedSolution &
 void IteratedLocalSearch::run() {
     Instance& instance = Instance::get();
 
-    // initial solution
-    for (int i = 0 ; i < instance.vehicle_count() ; i++) random_move(_best_non_active, _best_active);
-    _best_objective_value = cost(_best_active);
+    set<pair<int, int>> init_active = _best_active;
+    set<pair<int, int>> init_non_active = _best_non_active;
 
-    // local search
-    for (int i = 0 ; i < 1000 ; i++) {
-        set<pair<int, int>> active = _best_active;
-        set<pair<int, int>> non_active = _best_non_active;
+    for (int k = 1 ; k < instance.vehicle_count() * 2 ; k++ ) {
+        _best_non_active = init_non_active;
+        _best_active = init_active;
 
-        relocate_move(non_active, active);
-        double f = cost(active);
+        // initial solution
+        for (int i = 0; i < k; i++) random_move(_best_non_active, _best_active);
+        _best_objective_value = cost(_best_active);
 
-        // cout << f << " : ";
-        // for (auto edge : active) cout << edge.first << "-" << edge.second << ", "; cout << endl;
+        // local search
+        for (int i = 0; i < 100000; i++) {
+            set<pair<int, int>> active = _best_active;
+            set<pair<int, int>> non_active = _best_non_active;
 
-        if (f > _best_objective_value) {
-            _best_objective_value = f;
-            _best_active = active;
-            _best_non_active = non_active;
+            relocate_move(active, non_active);
+            double f = cost(active);
+
+            // cout << f << " : ";
+            // for (auto edge : active) cout << edge.first << "-" << edge.second << ", "; cout << endl;
+
+            if (f <= _best_objective_value) {
+                _best_objective_value = f;
+                _best_active = active;
+                _best_non_active = non_active;
+            }
+        }
+
+        cout << _best_objective_value << " : ";
+        for (auto edge : _best_active) cout << edge.first << "-" << edge.second << ", ";
+        cout << endl;
+
+        if (_best_objective_value == 0) {
+            map<pair<int, int>, StationSchedule::Entry> detours;
+            cost(_best_active, &detours);
+            auto feasible_solution = Solution(_x, detours);
+            feasible_solution.print();
+            throw runtime_error("FEASIBLE FOUND !!");
         }
     }
-
-    if (_best_objective_value == 1) {
-        map<pair<int, int>, StationSchedule::Entry> detours;
-        cost(_best_active, &detours);
-        auto feasible_solution = Solution(_x, detours);
-        feasible_solution.print();
-        throw runtime_error("FEASIBLE FOUND !!");
-    }
-
 }
 
 IteratedLocalSearch::~IteratedLocalSearch() {
@@ -70,19 +81,24 @@ IteratedLocalSearch::~IteratedLocalSearch() {
 
 double IteratedLocalSearch::cost(set<pair<int, int>> &detours, map<pair<int, int>, StationSchedule::Entry>* saver) const {
     Instance& instance = Instance::get();
-    unsigned long int k = 0;
-    int underbattery_route = 0;
+    unsigned long int k = 0, route_charged = 0, score = 0;
 
     map<int, StationSchedule> schedules;
     for (const StationNode* station : instance.stations()) schedules.insert({ station->id, StationSchedule(*station) });
 
-    for (const Route& route : _x.routes()) {
+    vector<Route> routes = _x.routes();
+    sort(routes.begin(), routes.end(), [](const Route& A, const Route& B){
+        return A.free_time() < B.free_time();
+    });
+
+    for (const Route& route : routes) {
         const vector<const CustomerNode*>& customers = route.customers();
         unsigned long int nb_segments = customers.size() + 1;
         if (nb_segments == 1) { k++; continue; }
 
         double t = instance.max_tour_time();
         double b = 0;
+        unsigned long int l = nb_segments - 1;
         for (unsigned long int i = nb_segments - 1 ; i < nb_segments ; i--) {
             Segment u = segment(route, i);
 
@@ -92,6 +108,8 @@ double IteratedLocalSearch::cost(set<pair<int, int>> &detours, map<pair<int, int
                 Interval arg_I;
                 for (const StationNode* station : instance.stations()) {
                     if (i == 0 && station->id != 0) continue;
+                    // if (i != 0 && station->id == 0) continue;
+
                     const double d_is = Node::d(u.i, *station);
                     const double b_is = instance.distance_to_consumed_battery(d_is);
                     const double t_is = instance.distance_to_time(d_is);
@@ -132,6 +150,8 @@ double IteratedLocalSearch::cost(set<pair<int, int>> &detours, map<pair<int, int
                     if (saver != nullptr) saver->insert({ { u.i.id, u.j.id }, entry });
                     b = -b_is;
                     t = min(arg_I.from() - t_is, u.deadline_i) - u.service_time_i;
+                    if (arg_station->id == 0) route_charged++;
+                    l = i;
                 } else {
                     break;
                 }
@@ -144,10 +164,13 @@ double IteratedLocalSearch::cost(set<pair<int, int>> &detours, map<pair<int, int
                 b -= b_ij;
             }
         }
+        score += l;
 
     }
 
-    return (double) k / (detours.size() + instance.vehicle_count());
+    return score;
+    return route_charged;
+    return (double) k / (detours.size() + instance.vehicle_count() );
 }
 
 IteratedLocalSearch::Segment IteratedLocalSearch::segment(const Route& route, unsigned long int i) const {

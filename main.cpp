@@ -16,7 +16,7 @@ int main() {
             "../input/Instance4_3s_45c_6v.txt"
     };
     const string output = "./output.csv";
-    const double max_execution_time = 30;
+    const double max_execution_time = 120;
 
     Instance::load_from_file(inputs[0]);
 

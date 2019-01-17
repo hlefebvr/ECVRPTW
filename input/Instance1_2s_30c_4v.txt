@@ -75,5 +75,5 @@ CUSTOMERS
 
 INSTDATA 
  Tmax        NumV      Capacity Speed        DistCost  Batt    Ro Alpha 
-   33           4          420    50                5    14   0.2  2.00 
+   33           4          420    50                5    14   0.2  2.00
 

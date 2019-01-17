@@ -31,7 +31,7 @@ StationSchedule::Entry& StationSchedule::add_entry(const Interval &interval) {
 }
 
 StationSchedule::~StationSchedule() {
-    for (auto p_schedule : entries)
+    for (auto& p_schedule : entries)
         for (auto entry : p_schedule) delete entry;
 }
 
@@ -39,7 +39,7 @@ vector<pair<Interval, int>> StationSchedule::availabilities_within(const Interva
     vector<pair<Interval, int>> availabilities;
 
     int plug_id = 0;
-    for (auto plug_schedule : entries) {
+    for (auto& plug_schedule : entries) {
 
         Entry zero = Entry(Interval(0,0), station);
         Entry* last_entry = &zero;
