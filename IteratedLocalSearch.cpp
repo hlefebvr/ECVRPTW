@@ -32,46 +32,46 @@ IteratedLocalSearch::IteratedLocalSearch(SolutionCallback &cb, RelaxedSolution &
 void IteratedLocalSearch::run() {
     Instance& instance = Instance::get();
 
-    set<pair<int, int>> init_active = _best_active;
-    set<pair<int, int>> init_non_active = _best_non_active;
+    set<pair<int, int>> detours;
+    double best_cost = cost(detours);
 
-    for (int k = 1 ; k < instance.vehicle_count() * 2 ; k++ ) {
-        _best_non_active = init_non_active;
-        _best_active = init_active;
+    for (auto& route : _x.routes()) {
+        unsigned long int n = route.customers().size() + 1;
+        unsigned long int arg_i = n - 1;
 
-        // initial solution
-        for (int i = 0; i < k; i++) random_move(_best_non_active, _best_active);
-        _best_objective_value = cost(_best_active);
+        for (int n_try = 0 ; n_try < 5 ; n_try++) {
+            pair<int, int> arg_edge;
+            bool improved = false;
+            for (unsigned long int i = arg_i; i != 0; i -= 1) {
+                Segment u = segment(route, i);
 
-        // local search
-        for (int i = 0; i < 100000; i++) {
-            set<pair<int, int>> active = _best_active;
-            set<pair<int, int>> non_active = _best_non_active;
+                set<pair<int, int>> detours_tilde = detours;
+                detours_tilde.insert({u.i.id, u.j.id});
 
-            relocate_move(active, non_active);
-            double f = cost(active);
+                double f = cost(detours_tilde);
+                if (f <= best_cost) {
+                    if (f < best_cost) improved = true;
+                    arg_edge = { u.i.id, u.j.id };
+                    arg_i = i;
+                    best_cost = f;
+                }
+            }
 
-            // cout << f << " : ";
-            // for (auto edge : active) cout << edge.first << "-" << edge.second << ", "; cout << endl;
-
-            if (f <= _best_objective_value) {
-                _best_objective_value = f;
-                _best_active = active;
-                _best_non_active = non_active;
+            if (improved) {
+                detours.insert(arg_edge);
             }
         }
+    }
 
-        cout << _best_objective_value << " : ";
-        for (auto edge : _best_active) cout << edge.first << "-" << edge.second << ", ";
-        cout << endl;
+    double f = cost(detours);
+    cout << f << endl;
 
-        if (_best_objective_value == 0) {
-            map<pair<int, int>, StationSchedule::Entry> detours;
-            cost(_best_active, &detours);
-            auto feasible_solution = Solution(_x, detours);
-            feasible_solution.print();
-            throw runtime_error("FEASIBLE FOUND !!");
-        }
+    if (f == 6) {
+        map<pair<int, int>, StationSchedule::Entry> saver;
+        cost(detours, &saver);
+        auto feasible_solution = Solution(_x, saver);
+        feasible_solution.print();
+        throw runtime_error("manual interuption");
     }
 }
 
