@@ -142,5 +142,6 @@ void Solution::Explorer::explore() {
 
         // remains from last_visited_node to depot
         after_route(route);
+        _D += _d;
     }
 }

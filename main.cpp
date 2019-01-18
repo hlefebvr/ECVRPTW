@@ -21,11 +21,14 @@ int main() {
 
     Instance::load_from_file(inputs[0]);
 
-    /* auto verifier = InstanceVerifier();
-    verifier.run(); */
-
     auto solver = Solver(max_execution_time);
-    solver.run();
+
+    double exec_time, distance;
+    const Solution& x_opt = solver.run(&distance, &exec_time);
+    x_opt.print();
+
+    cout << "Execution time = " << exec_time << endl;
+    cout << "Distance       = " << distance << endl;
 
     return 0;
 }

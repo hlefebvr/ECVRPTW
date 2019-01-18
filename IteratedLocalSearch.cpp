@@ -34,8 +34,7 @@ void IteratedLocalSearch::run() {
     map<int, StationSchedule> schedules;
     map<pair<int, int>, StationSchedule::Entry> detours;
 
-    for (const StationNode* station : instance.stations())
-        schedules.insert({station->id, StationSchedule(*station)});
+    for (const StationNode* station : instance.stations()) schedules.insert({station->id, StationSchedule(*station)});
 
     vector<Route> routes = _x.routes();
     sort(routes.begin(), routes.end(), [](const Route& A, const Route& B){ return A.free_time() < B.free_time(); });
@@ -52,7 +51,8 @@ void IteratedLocalSearch::run() {
                 if (arg_station == nullptr) break;
                 Segment u = segment(route, arg_e);
                 StationSchedule& schedule = schedules.at(arg_station->id);
-                StationSchedule::Entry entry = schedules.at(arg_station->id).add_entry(arg_I);
+                cout << arg_I.from() << " to " << arg_I.to() << endl;
+                StationSchedule::Entry entry = schedule.add_entry(arg_I);
                 detours.insert({ { u.i.id, u.j.id }, entry });
                 t = arg_t;
                 b = arg_b;
@@ -90,7 +90,7 @@ void IteratedLocalSearch::run() {
                             const double b_j = b - b_is + max_gain - b_sj;
                             const double t_b = instance.time_needed_to_charge(max_gain);
 
-                            if (first_availability.span() >= t_b && max_gain >= max_b && (b - b_is) >= 0 && max_gain > 0) {
+                            if (first_availability.span() >= t_b /* && max_gain >= max_b */ && (b - b_is) >= 0 && max_gain > 0) {
                                 max_b = max_gain;
                                 arg_station = s;
                                 arg_I = Interval(first_availability.from(), first_availability.from() + t_b);

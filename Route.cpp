@@ -48,8 +48,7 @@ double Route::evaluate() {
     _service_time = 0;
     _nb_tardy_deliveries = 0;
 
-    double hypo = _customers.empty() ? 0 : instance.time_needed_to_charge(instance.distance_to_consumed_battery(Node::d(instance.depot(), *_customers[0])));
-    double t = 0; // TODO : or better t = time needed to charge to go to the first node ?
+    double t = 0;
 
     const Node* last_visited_node = &instance.depot();
     for (const CustomerNode* customer : _customers) {
