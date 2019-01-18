@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Instance.h"
+#include "InstanceVerifier.h"
 #include "Solver.h"
 
 using namespace std;
@@ -19,6 +20,9 @@ int main() {
     const double max_execution_time = 10;
 
     Instance::load_from_file(inputs[0]);
+
+    /* auto verifier = InstanceVerifier();
+    verifier.run(); */
 
     auto solver = Solver(max_execution_time);
     solver.run();

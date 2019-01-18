@@ -14,20 +14,15 @@ class IteratedLocalSearch {
     RelaxedSolution& _x;
 
     struct Segment {
-        Segment(const Node& i, const Node& j, double min_departure_i, double deadline_i, double st_i)
-            : i(i), j(j), min_departure_i(min_departure_i), deadline_i(deadline_i), service_time_i(st_i) {}
+        Segment(const Node& i, const Node& j, double max_arrival_j, double release_date_j, double st_j)
+            : i(i), j(j), max_arrival_j(max_arrival_j), release_date_j(release_date_j), service_time_j(st_j) {}
         const Node& i;
         const Node& j;
-        double min_departure_i, deadline_i, service_time_i;
+        double max_arrival_j, release_date_j, service_time_j;
     };
 
-    map<int, const vector<double>*> _min_departure;
-    set<pair<int, int>> _best_active, _best_non_active;
-    double _best_objective_value;
+    map<int, const vector<double>*> _max_arrival;
 
-    void random_move(set<pair<int, int>>& from, set<pair<int, int>>& to);
-    void relocate_move(set<pair<int, int>>& active, set<pair<int, int>>& non_active);
-    double cost(set<pair<int, int>>& detours, map<pair<int, int>, StationSchedule::Entry>* saver = nullptr) const;
     Segment segment(const Route& route, unsigned long int i) const;
 public:
     IteratedLocalSearch(SolutionCallback& cb, RelaxedSolution& x);

@@ -9,6 +9,9 @@ void Solution::print() const {
         void on_arrival_to_station(const StationNode& node) override {
             cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
         }
+        void on_departure_from_station(const StationNode& node) override {
+            cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
+        }
         void on_departure_from_customer(const CustomerNode& node) override {
             cout << fixed << "CUSTOMER\t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t"
                 << "[" << node.release_date << ", " << node.deadline << "], st = " << node.service_time << "\t";
@@ -36,7 +39,7 @@ void Solution::Explorer::explore() {
 
     for (const Route& route : _x._fixed_routes.routes()) {
         _t = 0;
-        _b = 0;
+        _b = instance.battery_capacity();
         _d = 0;
         _q = 0;
         before_route(route);
@@ -99,13 +102,43 @@ void Solution::Explorer::explore() {
 
             last_visited_node = customer;
         }
-        const double d_ij = Node::d(*last_visited_node, instance.depot());
-        const double t_ij = instance.distance_to_time(d_ij);
-        const double b_ij = instance.distance_to_consumed_battery(d_ij);
-        _d += d_ij;
-        _t += t_ij;
-        _b -= b_ij;
-        on_arrival_to_node(instance.depot());
+        const Node& depot = instance.depot();
+        if (_x._charging_decisions.count({ last_visited_node->id, depot.id }) == 0) {
+            const double d_ij = Node::d(*last_visited_node, instance.depot());
+            const double t_ij = instance.distance_to_time(d_ij);
+            const double b_ij = instance.distance_to_consumed_battery(d_ij);
+            _d += d_ij;
+            _t += t_ij;
+            _b -= b_ij;
+            on_arrival_to_node(depot);
+        } else {
+            StationSchedule::Entry entry = _x._charging_decisions.at({ last_visited_node->id, depot.id });
+            const double d_is = Node::d(*last_visited_node, *entry.station);
+            const double d_sj = Node::d(*entry.station, depot);
+            const double t_is = instance.distance_to_time(d_is);
+            const double t_sj = instance.distance_to_time(d_sj);
+            const double b_is = instance.distance_to_consumed_battery(d_is);
+            const double b_sj = instance.distance_to_consumed_battery(d_sj);
+
+            _d += d_is;
+            _b -= b_is;
+            _t += t_is;
+
+            on_arrival_to_node(*entry.station);
+            on_arrival_to_station(*entry.station);
+
+            _b += instance.time_to_battery_gain(entry.interval.span());
+            _t = entry.interval.to();
+
+            on_departure_from_station(*entry.station);
+            on_departure_from_node(*entry.station);
+
+            _d += d_sj;
+            _t += t_sj;
+            _b -= b_sj;
+
+            on_arrival_to_node(depot);
+        }
 
         // remains from last_visited_node to depot
         after_route(route);
