@@ -27,7 +27,10 @@ StationSchedule::Entry& StationSchedule::add_entry(const Interval &interval) {
         entries[plug].insert(new_entry);
         return *new_entry;
     }
-    else throw runtime_error("Requested usage is not available");
+    else {
+        cout << "Interval from " << interval.from() << " to " << interval.to() << endl;
+        throw runtime_error("Requested usage is not available");
+    }
 }
 
 StationSchedule::~StationSchedule() {
