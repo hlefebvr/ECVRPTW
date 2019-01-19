@@ -19,7 +19,7 @@ int main() {
     const string output = "./output.csv";
     const double max_execution_time = 10;
 
-    Instance::load_from_file(inputs[0]);
+    Instance::load_from_file(inputs[0]); // ok for 0, 1, 2 ko for 3, 4, 5
 
     auto solver = Solver(max_execution_time);
 

@@ -82,6 +82,7 @@ public:
     double time_needed_to_charge(double b) const { return b / battery_recharge_rate(); }
 
     const StationNode& closest_station_between(const Node& A, const Node& B, double* detour = nullptr) const;
+    const StationNode& farthest_station_between(const Node& A, const Node& B, double* detour = nullptr) const;
 };
 
 #endif //ECVRPTW_INSTANCE_H

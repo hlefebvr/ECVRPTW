@@ -146,3 +146,21 @@ const StationNode &Instance::closest_station_between(const Node&A, const Node& B
     return *argmin;
 }
 
+const StationNode &Instance::farthest_station_between(const Node&A, const Node& B, double* detour) const {
+
+    const StationNode* argmax = nullptr;
+    double max = 0;
+    for (const StationNode* s : _vstations) {
+        if (s->id == instance->depot().id) continue;
+        const double detour = Node::d(A, *s) + Node::d(*s, B);
+        if (detour > max) {
+            max = detour;
+            argmax = s;
+        }
+    }
+
+    if (argmax == nullptr) throw runtime_error("No station in the instance");
+    if (detour != nullptr) *detour = max;
+
+    return *argmax;
+}
