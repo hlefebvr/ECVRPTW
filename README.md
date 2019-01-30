@@ -20,3 +20,5 @@ Objective : minimizing the overall travelled distance
 
 - Simulated Annealing generating relaxed solutions with respect to the battery constraint (one-point move and 2-OPT move)
 - Local search for charging detours insertion
+
+![Implemented solver](slides/metaheuristic.png)
