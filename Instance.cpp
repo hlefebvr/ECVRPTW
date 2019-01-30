@@ -118,8 +118,6 @@ vector<string> Instance::get_next_row(ifstream& reader) {
     return cols;
 }
 
-// Instance::Instance(const Instance& orig) {}
-
 Instance::~Instance() {
     if (_depot != nullptr) delete _depot;
 
@@ -127,7 +125,7 @@ Instance::~Instance() {
     for (auto station : _vstations) delete station;
 }
 
-const StationNode &Instance::closest_station_between(const Node&A, const Node& B, double* detour) const {
+const StationNode &Instance::closest_station_between(const Node&A, const Node& B, double* save_detour) const {
 
     const StationNode* argmin = nullptr;
     double min = numeric_limits<double>::max();
@@ -141,7 +139,7 @@ const StationNode &Instance::closest_station_between(const Node&A, const Node& B
     }
 
     if (argmin == nullptr) throw runtime_error("No station in the instance");
-    if (detour != nullptr) *detour = min;
+    if (save_detour != nullptr) *save_detour = min;
 
     return *argmin;
 }

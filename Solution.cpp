@@ -6,13 +6,13 @@ void Solution::print() const {
 
     class SolutionWriter : public Explorer {
     protected:
-        void on_arrival_to_station(const StationNode& node) override {
+        void on_arrival_to_station(const Node& previous, const StationNode& node, const Interval& interval) override {
             cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
         }
-        void on_departure_from_station(const StationNode& node) override {
+        void on_departure_from_station(const Node& previous, const StationNode& node) override {
             cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
         }
-        void on_departure_from_customer(const CustomerNode& node) override {
+        void on_departure_from_customer(const Node& previous, const CustomerNode& node) override {
             cout << fixed << "CUSTOMER\t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t"
                 << "[" << node.release_date << ", " << node.deadline << "], st = " << node.service_time << "\t";
             if (_t > node.deadline) cout << "LATE";
@@ -32,6 +32,88 @@ void Solution::print() const {
     cout << "Solution with " << _charging_decisions.size() << " detours" << endl;
     auto writer = SolutionWriter(*this);
     writer.explore();
+}
+
+void Solution::to_file(double exec_time, double obj) const {
+    Instance& instance = Instance::get();
+    const string result_filename = instance.get_result_filename();
+
+    ofstream f;
+    f.open(result_filename);
+
+    f << "Obj;" << obj << endl;
+    f << "CPU;" << exec_time << endl;
+    f << "Vehicle;Orig;Dest;Dist;Rel;Dead;ServTime;DemDest;ArrTimeDest;ArrBattDest;ArrLoadDest;RecTime;PlugUsed;StartRecharging" << endl;
+
+    class SolutionToFile : public Explorer {
+        ostream& f;
+        int route_id;
+        double max_q;
+    public:
+        explicit  SolutionToFile(const Solution& x, ostream& f) : Explorer(x), f(f) {}
+        void before_route(const Route& route) override {
+            route_id = route.id() + 1;
+            max_q = 0;
+            for (const CustomerNode* node : route.customers()) max_q += node->demand;
+        }
+        void on_arrival_to_customer(const Node& previous, const CustomerNode& node) override {
+            double d_ij = Node::d(previous, node);
+            f << route_id << ";"
+              << previous.id << ";"
+              << node.id << ";"
+              << d_ij << ";"
+              << node.release_date << ";"
+              << node.deadline - node.service_time << ";"
+              << node.service_time << ";"
+              << node.demand << ";"
+              << max( t(), node.release_date ) << ";"
+              << b() << ";"
+              << max_q - q() << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0
+              << endl;
+        }
+        void on_arrival_to_station(const Node& previous, const StationNode& node, const Interval& interval) override {
+            f << route_id << ";"
+              << previous.id << ";"
+              << node.id << ";"
+              << Node::d(previous, node) << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << t() << ";"
+              << b() << ";"
+              << max_q - q() << ";"
+              << interval.span() << ";" // recharging time
+              << 1 << ";" // plug_used
+              << interval.from() // start recharging
+              << endl;
+        }
+        void on_arrival_to_node(const Node& previous, const Node& node) override {
+            if (node.id != Instance::get().depot().id) return;
+            f << route_id << ";"
+              << previous.id << ";"
+              << node.id << ";"
+              << Node::d(previous, node) << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << t() << ";"
+              << b() << ";"
+              << max_q - q() << ";"
+              << 0 << ";"
+              << 0 << ";"
+              << 0
+              << endl;
+        }
+    };
+
+    SolutionToFile(*this, f).explore();
+
+    f.close();
 }
 
 void Solution::Explorer::explore() {
@@ -58,27 +140,27 @@ void Solution::Explorer::explore() {
                 _b -= b_is;
                 _t += t_is;
 
-                on_arrival_to_node(*entry.station);
-                on_arrival_to_station(*entry.station);
+                on_arrival_to_node(*last_visited_node, *entry.station);
+                on_arrival_to_station(*last_visited_node, *entry.station, entry.interval);
 
                 _b += instance.time_to_battery_gain(entry.interval.span());
                 _t = entry.interval.to();
 
-                on_departure_from_station(*entry.station);
-                on_departure_from_node(*entry.station);
+                on_departure_from_station(*last_visited_node, *entry.station);
+                on_departure_from_node(*last_visited_node, *entry.station);
 
                 _d += d_sj;
                 _t += t_sj;
                 _b -= b_sj;
 
-                on_arrival_to_node(*customer);
-                on_arrival_to_customer(*customer);
+                on_arrival_to_node(*entry.station, *customer);
+                on_arrival_to_customer(*entry.station, *customer);
 
                 if (_t < customer->release_date) _t = customer->release_date;
                 _t += customer->service_time;
 
-                on_departure_from_customer(*customer);
-                on_departure_from_node(*customer);
+                on_departure_from_customer(*entry.station, *customer);
+                on_departure_from_node(*entry.station, *customer);
 
             } else {
                 const double d_ij = Node::d(*last_visited_node, *customer);
@@ -88,16 +170,16 @@ void Solution::Explorer::explore() {
                 _d += d_ij;
                 _t += t_ij;
                 _b -= b_ij;
-                on_arrival_to_node(*customer);
-                on_arrival_to_customer(*customer);
+                on_arrival_to_node(*last_visited_node, *customer);
+                on_arrival_to_customer(*last_visited_node, *customer);
 
                 if (_t < customer->release_date) _t = customer->release_date;
                 _t += customer->service_time;
 
                 _q += customer->demand;
 
-                on_departure_from_customer(*customer);
-                on_departure_from_node(*customer);
+                on_departure_from_customer(*last_visited_node, *customer);
+                on_departure_from_node(*last_visited_node, *customer);
             }
 
             last_visited_node = customer;
@@ -110,7 +192,7 @@ void Solution::Explorer::explore() {
             _d += d_ij;
             _t += t_ij;
             _b -= b_ij;
-            on_arrival_to_node(depot);
+            on_arrival_to_node(*last_visited_node, depot);
         } else {
             StationSchedule::Entry entry = _x._charging_decisions.at({ last_visited_node->id, depot.id });
             const double d_is = Node::d(*last_visited_node, *entry.station);
@@ -124,20 +206,20 @@ void Solution::Explorer::explore() {
             _b -= b_is;
             _t += t_is;
 
-            on_arrival_to_node(*entry.station);
-            on_arrival_to_station(*entry.station);
+            on_arrival_to_node(*last_visited_node, *entry.station);
+            on_arrival_to_station(*last_visited_node, *entry.station, entry.interval);
 
             _b += instance.time_to_battery_gain(entry.interval.span());
             _t = entry.interval.to();
 
-            on_departure_from_station(*entry.station);
-            on_departure_from_node(*entry.station);
+            on_departure_from_station(*last_visited_node, *entry.station);
+            on_departure_from_node(*last_visited_node, *entry.station);
 
             _d += d_sj;
             _t += t_sj;
             _b -= b_sj;
 
-            on_arrival_to_node(depot);
+            on_arrival_to_node(*entry.station, depot);
         }
 
         // remains from last_visited_node to depot

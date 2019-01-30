@@ -20,7 +20,6 @@ const Solution& Solver::run(double* distance, double* execution_time) {
 
 void Solver::callback(Solution& x) {
     _nb_solutions += 1;
-    cout << "ok" << endl;
     auto evaluator = Solution::Explorer(x);
     evaluator.explore();
     const double objective_value = evaluator.D();
@@ -31,10 +30,10 @@ void Solver::callback(Solution& x) {
     }
 }
 
-void Solver::relaxed_callback(RelaxedSolution& x) {
+bool Solver::relaxed_callback(RelaxedSolution& x) {
     _nb_relaxed_solutions += 1;
     auto ils = IteratedLocalSearch(*this, x);
-    ils.run();
+    return ils.run();
 }
 
 Solver::~Solver() {

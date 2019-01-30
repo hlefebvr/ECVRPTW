@@ -28,7 +28,7 @@ IteratedLocalSearch::IteratedLocalSearch(SolutionCallback &cb, RelaxedSolution &
 
 }
 
-void IteratedLocalSearch::run() {
+bool IteratedLocalSearch::run(unsigned long int n_try) {
     Instance& instance = Instance::get();
     unsigned long int nb_customers = instance.customers().size();
     default_random_engine generator((unsigned long) chrono::system_clock::now().time_since_epoch().count());
@@ -41,13 +41,10 @@ void IteratedLocalSearch::run() {
     const unsigned long int max_nb_detours = nb_customers + instance.vehicle_count();
     unsigned long int best_nb_detours = max_nb_detours;
     double best_objective_value = cost(best_detour_plan);
-    bool useless_perturbation = true;
-    pair<int, unsigned long int> perturbation = { -1, -1 };
 
     unsigned long int nb_iteration_without_improvement = 0;
-    unsigned long int nb_perturbation = 0;
-    int i = 0, n_iter = 0;
-    while (nb_iteration_without_improvement < 10 /* nb_perturbation < nb_customers */) {
+    int n_iter = 0;
+    while (nb_iteration_without_improvement < 10) {
         // Local Search
         pair<int, unsigned long int> ignored_detour;
         uniform_int_distribution<unsigned long int> among_active_detours(0, best_nb_detours);
@@ -60,56 +57,21 @@ void IteratedLocalSearch::run() {
             best_detour_plan.at(ignored_detour.first).at(ignored_detour.second) = false;
             nb_iteration_without_improvement = 0;
             best_nb_detours -= 1;
-            useless_perturbation = false;
 
             if (best_objective_value < big_M) {
-                cout << best_objective_value << " / " << f << endl;
                 auto feasible_solution = Solution(_x, detours);
                 _cb.callback(feasible_solution);
-                feasible_solution.print();
-                // throw runtime_error("FEASIBLE TRIGGER");
             }
         } else {
             nb_iteration_without_improvement += 1;
         }
-
-        // Perturb
-        /* if (nb_iteration_without_improvement == nb_customers) {
-            nb_perturbation += 1;
-            nb_iteration_without_improvement = 0;
-            uniform_int_distribution<unsigned long int> among_inactive_detours(0, nb_customers - best_nb_detours);
-            const unsigned long int detour_to_insert = among_inactive_detours(generator);
-            unsigned long int inactive_detour_count = 0;
-            for (const Route& route : _x.routes()) {
-                int id = route.id();
-                vector<bool>& route_detours = best_detour_plan.at(id);
-                for (unsigned long int i = 0, n = route_detours.size() ; i < n ; i += 1) {
-                    inactive_detour_count += !route_detours[i];
-                    if (inactive_detour_count == detour_to_insert) {
-                        route_detours[i] = true;
-                        perturbation = { id, i };
-                        break;
-                    }
-                }
-            }
-            best_nb_detours = min(best_nb_detours + 1, max_nb_detours);
-            useless_perturbation = true;
-        } */
         n_iter++;
     }
 
-    if (useless_perturbation && perturbation != pair<int, unsigned long int> { -1, -1 })
-        best_detour_plan.at(perturbation.first).at(perturbation.second) = false;
+    // if (n_try < 2) run(n_try + 1);
 
-    /* if (true || best_objective_value < big_M) {
-        map<pair<int, int>, StationSchedule::Entry> detours;
-        const double f_opt = cost(best_detour_plan, -1, nullptr, &detours);
-        cout << best_objective_value << " / " << f_opt << endl;
-        auto feasible_solution = Solution(_x, detours);
-        _cb.callback(feasible_solution);
-        feasible_solution.print();
-        throw runtime_error("manual interupt");
-    } */
+    return best_objective_value >= big_M; // true if we could find a feasible out of it
+
 }
 
 
@@ -158,11 +120,11 @@ double IteratedLocalSearch::cost(const IteratedLocalSearch::DetourPlan &detours,
     double detoured_distance = 0;
 
     const vector<Route>& routes = _x.routes();
-    // sort(routes.begin(), routes.end(), [](const Route& A, const Route& B){ return A.free_time() < B.free_time(); });
 
     for (const Route& route : routes) {
         const int route_id = route.id();
         const unsigned long int nb_segment = route.customers().size() + 1;
+        if (nb_segment == 1) continue;
         double t = 0;
         double b = b_cap;
         for (unsigned long int e = 0 ; e < nb_segment ; e += 1) {
@@ -173,7 +135,7 @@ double IteratedLocalSearch::cost(const IteratedLocalSearch::DetourPlan &detours,
 
             if (is_a_detour && ignore_detour == detour_count) {
                 if (ignored_detour != nullptr) *ignored_detour = { route_id, e };
-            } else if (is_a_detour) {
+            } else if (is_a_detour && ignore_detour != detour_count) {
                 const StationNode& closest_station = instance.closest_station_between(u.i, u.j);
                 const double d_is = Node::d(u.i, closest_station);
                 const double t_is = instance.distance_to_time(d_is);

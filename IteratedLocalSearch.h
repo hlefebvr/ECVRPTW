@@ -28,10 +28,9 @@ class IteratedLocalSearch {
 
     Segment segment(const Route& route, unsigned long int i) const;
     double cost(const DetourPlan& detours, unsigned long int ignore_detour = -1, pair<int, unsigned long int>* ignored_detour = nullptr, map<pair<int, int>, StationSchedule::Entry>* saver = nullptr) const;
-    // cost(best_detour_plan, among_active_detours(generator), &ignored_detour);
 public:
     IteratedLocalSearch(SolutionCallback& cb, RelaxedSolution& x);
-    void run();
+    bool run(unsigned long int n_try = 0);
 };
 
 

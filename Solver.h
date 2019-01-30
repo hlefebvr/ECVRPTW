@@ -16,7 +16,7 @@ public:
     ~Solver();
     const Solution& run(double* distance = nullptr, double* execution_time = nullptr);
     void callback(Solution& x) override;
-    void relaxed_callback(RelaxedSolution& x) override;
+    bool relaxed_callback(RelaxedSolution& x) override;
 };
 
 

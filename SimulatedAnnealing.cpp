@@ -14,10 +14,10 @@ void SimulatedAnnealing::iter() {
     const double objective_value = x.evaluate();
     const bool is_feasible = x.feasible();
 
+    if (is_feasible) _cb.relaxed_callback(x);
+
     const bool objective_value_improvement = objective_value <= _current_objetive_value;
     const bool accepted_anyway = uni_dist(generator) <= exp( -( objective_value - _current_objetive_value ) / _temperature );
-
-    if (is_feasible) _cb.relaxed_callback(x);
 
     if (objective_value_improvement || accepted_anyway) {
         _current_solution = x;

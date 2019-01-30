@@ -81,6 +81,8 @@ public:
     double time_to_battery_gain(double t) const { return t * battery_recharge_rate(); }
     double time_needed_to_charge(double b) const { return b / battery_recharge_rate(); }
 
+    string get_result_filename() const { return _name.substr(0, _name.find_last_of('.')) + "_Result.csv"; }
+
     const StationNode& closest_station_between(const Node& A, const Node& B, double* detour = nullptr) const;
     const StationNode& farthest_station_between(const Node& A, const Node& B, double* detour = nullptr) const;
 };

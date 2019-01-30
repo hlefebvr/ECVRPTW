@@ -2,3 +2,10 @@ cmake-build-debug
 *.o
 *.c
 .idea
+*.aux
+*.toc
+*.snm
+*.out
+*.nav
+*.log
+*_Result.csv

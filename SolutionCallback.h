@@ -7,7 +7,7 @@
 
 class SolutionCallback {
 public:
-    virtual void relaxed_callback(RelaxedSolution&) = 0;
+    virtual bool relaxed_callback(RelaxedSolution&) = 0;
     virtual void callback(Solution&) = 0;
 };
 
