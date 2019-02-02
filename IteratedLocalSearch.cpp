@@ -168,9 +168,13 @@ double IteratedLocalSearch::cost(const IteratedLocalSearch::DetourPlan &detours,
 
                         if (!availabilities.empty()) {
                             Interval first_availability = availabilities.front().first;
+                            if (first_availability.from() < t + t_is) {
+                                cout << "HHHEEELLLLPPP" << endl;
+                                throw runtime_error("FUUCCCK");
+                            }
                             if (first_availability.span() >= t_needed) {
                                 b = min(b - b_is + b_needed, b_cap) - b_sj;
-                                t = first_availability.from() + t_needed + t_sj;
+                                t = max(first_availability.from() + t_needed + t_sj, u.release_date_j) + u.service_time_j;
                                 StationSchedule::Entry entry = schedule.add_entry(Interval(first_availability.from(), first_availability.from() + t_needed));
                                 if (saver != nullptr) saver->insert({{u.i.id, u.j.id}, entry});
                                 continue;

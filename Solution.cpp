@@ -7,7 +7,7 @@ void Solution::print() const {
     class SolutionWriter : public Explorer {
     protected:
         void on_arrival_to_station(const Node& previous, const StationNode& node, const Interval& interval) override {
-            cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
+            cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << "from " << interval.from() << " to " << interval.to() << endl;
         }
         void on_departure_from_station(const Node& previous, const StationNode& node) override {
             cout << fixed << "STATION \t" << node.id << "\t" << _t << "\t" << _d << "\t" << _b << "\t" << _q << "\t" << endl;
@@ -75,6 +75,7 @@ void Solution::to_file(double exec_time, double obj) const {
               << endl;
         }
         void on_arrival_to_station(const Node& previous, const StationNode& node, const Interval& interval) override {
+            if (interval.from() < t()) throw runtime_error("Charging before arrival");
             f << route_id << ";"
               << previous.id << ";"
               << node.id << ";"
