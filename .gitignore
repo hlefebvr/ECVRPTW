@@ -7,7 +7,5 @@ cmake-build-debug
 *.snm
 *.out
 *.nav
-*.log
-*_Result.csv
+main.log
 Verifier18.exe
-output.csv

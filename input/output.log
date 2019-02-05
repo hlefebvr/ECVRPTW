@@ -1,0 +1,284 @@
+Running ECVRPTW on input/Instance1_2s_30c_4v.txt for 10 s :
+Found one feasible solution in 10s (objective : 2330.49)
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 2245.36)
+Found one feasible solution in 10s (objective : 2352.29)
+Skipped : 2
+
+Average objective : 2309.38
+Average execution time : 10
+Running ECVRPTW on input/Instance1_2s_30c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 2217.53)
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 2115.45)
+No feasible solution could be find.
+Skipped : 3
+
+Average objective : 2166.49
+Average execution time : 30
+Running ECVRPTW on input/Instance1_2s_30c_4v.txt for 60 s :
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 2162.71)
+Found one feasible solution in 60s (objective : 2125.27)
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 3
+
+Average objective : 2143.99
+Average execution time : 60
+Running ECVRPTW on input/Instance2_2s_30c_4v.txt for 10 s :
+Found one feasible solution in 10s (objective : 1968.53)
+Found one feasible solution in 10s (objective : 2258.78)
+Found one feasible solution in 10s (objective : 1952.44)
+Found one feasible solution in 10s (objective : 2434.55)
+Found one feasible solution in 10s (objective : 1946.72)
+Skipped : 0
+
+Average objective : 2112.21
+Average execution time : 10
+Running ECVRPTW on input/Instance2_2s_30c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 1981.89)
+Found one feasible solution in 30s (objective : 2330.93)
+Found one feasible solution in 30s (objective : 2135.58)
+Found one feasible solution in 30s (objective : 2074.38)
+Found one feasible solution in 30s (objective : 1997.48)
+Skipped : 0
+
+Average objective : 2104.05
+Average execution time : 30
+Running ECVRPTW on input/Instance2_2s_30c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 2061.13)
+Found one feasible solution in 60s (objective : 1960.92)
+Found one feasible solution in 60s (objective : 2005.73)
+Found one feasible solution in 60s (objective : 1938.4)
+Found one feasible solution in 60s (objective : 1897.5)
+Skipped : 0
+
+Average objective : 1972.74
+Average execution time : 60
+Running ECVRPTW on input/Instance2_2s_40c_4v.txt for 10 s :
+Found one feasible solution in 10s (objective : 2000.54)
+Found one feasible solution in 10s (objective : 2213.81)
+Found one feasible solution in 10s (objective : 2399.24)
+Found one feasible solution in 10s (objective : 1759.5)
+Found one feasible solution in 10s (objective : 2207.48)
+Skipped : 0
+
+Average objective : 2116.12
+Average execution time : 10
+Running ECVRPTW on input/Instance2_2s_40c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 1660)
+Found one feasible solution in 30s (objective : 2152.2)
+Found one feasible solution in 30s (objective : 1928.6)
+Found one feasible solution in 30s (objective : 2014.25)
+Found one feasible solution in 30s (objective : 2239.74)
+Skipped : 0
+
+Average objective : 1998.96
+Average execution time : 30
+Running ECVRPTW on input/Instance2_2s_40c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 2079.74)
+Found one feasible solution in 60s (objective : 2285.28)
+Found one feasible solution in 60s (objective : 1869.08)
+Found one feasible solution in 60s (objective : 1951.46)
+Found one feasible solution in 60s (objective : 1951.63)
+Skipped : 0
+
+Average objective : 2027.44
+Average execution time : 60
+Running ECVRPTW on input/Instance3_2s_40c_4v.txt for 10 s :
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 2085.2)
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 2194.88)
+Skipped : 3
+
+Average objective : 2140.04
+Average execution time : 10
+Running ECVRPTW on input/Instance3_2s_40c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 2144.84)
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 4
+
+Average objective : 2144.84
+Average execution time : 30
+Running ECVRPTW on input/Instance3_2s_40c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 2142.54)
+Found one feasible solution in 60s (objective : 2066.31)
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 3
+
+Average objective : 2104.43
+Average execution time : 60
+Running ECVRPTW on input/Instance4_2s_40c_4v.txt for 10 s :
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 2254.32)
+Skipped : 9
+
+Average objective : 2254.32
+Average execution time : 10
+Running ECVRPTW on input/Instance4_2s_40c_4v.txt for 30 s :
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 2059.37)
+Skipped : 4
+
+Average objective : 2059.37
+Average execution time : 30
+Running ECVRPTW on input/Instance4_2s_40c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 2191.67)
+Found one feasible solution in 60s (objective : 2246.13)
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 2074.94)
+No feasible solution could be find.
+Skipped : 2
+
+Average objective : 2170.92
+Average execution time : 60
+Running ECVRPTW on input/Instance4_3s_45c_6v.txt for 10 s :
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 3597.62)
+Skipped : 8
+
+Average objective : 3597.62
+Average execution time : 10
+Running ECVRPTW on input/Instance4_3s_45c_6v.txt for 30 s :
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 3663.97)
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 4
+
+Average objective : 3663.97
+Average execution time : 30
+Running ECVRPTW on input/Instance4_3s_45c_6v.txt for 60 s :
+Found one feasible solution in 60s (objective : 3890.31)
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 3331.31)
+Skipped : 3
+
+Average objective : 3610.81
+Average execution time : 60
+Running ECVRPTW on input/NewInstance3_2s_40c_4v.txt for 10 s :
+Found one feasible solution in 10s (objective : 1919.07)
+Found one feasible solution in 10s (objective : 2269.67)
+Found one feasible solution in 10s (objective : 2038.23)
+Found one feasible solution in 10s (objective : 1999.86)
+Found one feasible solution in 10s (objective : 2404.86)
+Skipped : 0
+
+Average objective : 2126.34
+Average execution time : 10
+Running ECVRPTW on input/NewInstance3_2s_40c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 1933.85)
+Found one feasible solution in 30s (objective : 2333.18)
+Found one feasible solution in 30s (objective : 1962.93)
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 1918.5)
+Skipped : 1
+
+Average objective : 2037.12
+Average execution time : 30
+Running ECVRPTW on input/NewInstance3_2s_40c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 1980.41)
+Found one feasible solution in 60s (objective : 1950.35)
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 1773.2)
+Found one feasible solution in 60s (objective : 1802.51)
+Skipped : 1
+
+Average objective : 1876.62
+Average execution time : 60
+Running ECVRPTW on input/NewInstance4_2s_40c_4v.txt for 10 s :
+Found one feasible solution in 10s (objective : 2654.94)
+Found one feasible solution in 10s (objective : 2426.76)
+Found one feasible solution in 10s (objective : 2077.08)
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 2
+
+Average objective : 2386.26
+Average execution time : 10
+Running ECVRPTW on input/NewInstance4_2s_40c_4v.txt for 30 s :
+Found one feasible solution in 30s (objective : 2142.81)
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 2574)
+No feasible solution could be find.
+No feasible solution could be find.
+Skipped : 3
+
+Average objective : 2358.41
+Average execution time : 30
+Running ECVRPTW on input/NewInstance4_2s_40c_4v.txt for 60 s :
+Found one feasible solution in 60s (objective : 1972.03)
+Found one feasible solution in 60s (objective : 1806.8)
+Found one feasible solution in 60s (objective : 2257.88)
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 2049.7)
+Skipped : 1
+
+Average objective : 2021.6
+Average execution time : 60
+Running ECVRPTW on input/NewInstance4_3s_45c_6v.txt for 10 s :
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 10s (objective : 3144.44)
+Skipped : 8
+
+Average objective : 3144.44
+Average execution time : 10
+Running ECVRPTW on input/NewInstance4_3s_45c_6v.txt for 30 s :
+Found one feasible solution in 30s (objective : 2879.53)
+Found one feasible solution in 30s (objective : 3579.84)
+Found one feasible solution in 30s (objective : 3238)
+No feasible solution could be find.
+Found one feasible solution in 30s (objective : 3436.46)
+Skipped : 1
+
+Average objective : 3283.46
+Average execution time : 30
+Running ECVRPTW on input/NewInstance4_3s_45c_6v.txt for 60 s :
+No feasible solution could be find.
+No feasible solution could be find.
+Found one feasible solution in 60s (objective : 3866.59)
+Found one feasible solution in 60s (objective : 3242.96)
+Found one feasible solution in 60s (objective : 2934.67)
+Skipped : 2
+
+Average objective : 3348.07
+Average execution time : 60
+Done.
