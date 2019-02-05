@@ -6,22 +6,14 @@
 
 using namespace std;
 
-int main() {
-    vector<string> inputs = {
-            "../input/Instance1_2s_30c_4v.txt",
-            "../input/Instance2_2s_30c_4v.txt",
-            "../input/Instance2_2s_40c_4v.txt",
-            "../input/Instance3_2s_40c_4v.txt",
-            "../input/Instance4_2s_40c_4v.txt",
-            "../input/Instance4_3s_45c_6v.txt",
-            "../input/NewInstance3_2s_40c_4v.txt",
-            "../input/NewInstance4_2s_40c_4v.txt",
-            "../input/NewInstance4_3s_45c_6v.txt"
-    };
-    const string output = "./output.csv";
-    const double max_execution_time = 10;
+int main(int argc, char** argv) {
+    if (argc != 3) {
+        cout << "Usage : ECVRPTW <instance_file.txt> <max_execution_time>" << endl;
+        return -1;
+    }
 
-    const Instance& instance = Instance::load_from_file(inputs[0]);
+    const Instance& instance = Instance::load_from_file(argv[1]);
+    const double max_execution_time = atoi(argv[2]);
 
     unsigned long int feasible_found = 0, skipped = 0, n_try = 0;
     double sum_obj = 0, sum_exec_time = 0;
