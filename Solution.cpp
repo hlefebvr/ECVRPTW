@@ -42,7 +42,7 @@ void Solution::to_file(double exec_time, double obj) const {
     f.open(result_filename);
 
     f << "Obj;" << obj << endl;
-    f << "CPU;" << exec_time << endl;
+    f << "Time;" << exec_time << endl;
     f << "Vehicle;Orig;Dest;Dist;Rel;Dead;ServTime;DemDest;ArrTimeDest;ArrBattDest;ArrLoadDest;RecTime;PlugUsed;StartRecharging" << endl;
 
     class SolutionToFile : public Explorer {

@@ -9,3 +9,5 @@ cmake-build-debug
 *.nav
 *.log
 *_Result.csv
+Verifier18.exe
+

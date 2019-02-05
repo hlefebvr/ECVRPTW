@@ -12,6 +12,7 @@ class SimulatedAnnealing {
     RelaxedSolution _current_solution;
     double _current_objetive_value;
     double _temperature = 1000;
+
     const double _alpha = .7;
 
     void move(RelaxedSolution& x);

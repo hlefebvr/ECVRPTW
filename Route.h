@@ -19,7 +19,7 @@ class Route {
     double _distance, _capacity, _travel_time, _service_time;
     unsigned int _nb_tardy_deliveries;
     bool _evaluated = false;
-    int _id = route_id++;
+    int _id = route_id++ % Instance::get().vehicle_count();
 
     void push_back(const CustomerNode& customer);
     void apply_edd_rule();

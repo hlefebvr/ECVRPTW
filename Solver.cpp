@@ -10,8 +10,8 @@ const Solution& Solver::run(double* distance, double* execution_time) {
     if (execution_time != nullptr) *execution_time = chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now() - start).count();
     if (distance != nullptr) *distance = _best_objective_value;
 
-    cout << "Relaxed  = " << _nb_relaxed_solutions << endl;
-    cout << "Feasible = " << _nb_solutions << endl;
+    /* cout << "Relaxed  = " << _nb_relaxed_solutions << endl;
+    cout << "Feasible = " << _nb_solutions << endl; */
 
     if (_best_solution == nullptr) throw runtime_error("No feasible solution could be find.");
 
