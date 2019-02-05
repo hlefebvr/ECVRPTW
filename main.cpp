@@ -21,7 +21,7 @@ int main() {
     const string output = "./output.csv";
     const double max_execution_time = 10;
 
-    Instance::load_from_file(inputs[8]);
+    const Instance& instance = Instance::load_from_file(inputs[0]);
 
     unsigned long int feasible_found = 0, skipped = 0, n_try = 0;
     double sum_obj = 0, sum_exec_time = 0;
@@ -31,7 +31,7 @@ int main() {
 
             double exec_time, distance;
             const Solution &x_opt = solver.run(&distance, &exec_time);
-            const double objective = distance * Instance::get().unitary_cost();
+            const double objective = distance * instance.unitary_cost();
 
             x_opt.to_file(objective, exec_time);
 
@@ -52,6 +52,11 @@ int main() {
     const double avg_exec_time = sum_exec_time / (double) feasible_found;
     cout << "Average objective : " << avg_obj << endl;
     cout << "Average execution time : " << avg_exec_time << endl;
+
+    ofstream f;
+    f.open(instance.folder() + "/output.csv", ios::out | ios::app);
+    f << instance.pure_name() << ";" << avg_exec_time << ";" << avg_obj << endl;
+    f.close();
 
     return 0;
 }

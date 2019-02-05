@@ -10,4 +10,4 @@ cmake-build-debug
 *.log
 *_Result.csv
 Verifier18.exe
-
+output.csv
